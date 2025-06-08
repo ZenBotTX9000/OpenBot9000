@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base Palette (Light Theme - as requested) */
+    --color-grey-100: 248 248 247;
+    --color-grey-200: 235 235 232;
+    --color-grey-800: 60 58 70;
+    --color-grey-900: 40 42 54;
+    --color-accent-cream: 242 234 218;
+    --color-accent-cream-dark: 222 214 198;
+    --color-accent-gold: 180 150 110;
+    --color-accent-gold-dark: 150 120 90;
+    --color-accent-blue: 79 172 254;
+    --color-accent-green: 22 163 74;
+    --color-accent-red: 239 68 68;
+
+    /* Core Gradients */
+    --gradient-bg: linear-gradient(160deg, rgb(var(--color-grey-100)) 0%, rgb(var(--color-grey-200)) 100%);
+    --gradient-surface-primary: linear-gradient(160deg, rgb(var(--color-grey-100) / 0.8) 0%, rgb(var(--color-grey-100) / 0.6) 100%);
+    --gradient-surface-interactive: linear-gradient(160deg, rgb(var(--color-grey-100) / 0.9) 0%, rgb(var(--color-grey-200)) 100%);
+    --gradient-accent: linear-gradient(160deg, rgb(var(--color-accent-cream)) 0%, rgb(var(--color-accent-cream-dark)) 100%);
+    
+    /* Text Gradients */
+    --gradient-text-primary: linear-gradient(160deg, rgb(var(--color-grey-900)) 0%, rgb(var(--color-grey-800)) 100%);
+    --gradient-text-secondary: linear-gradient(160deg, rgb(var(--color-grey-800)) 0%, rgb(100 100 110) 100%);
+    --gradient-text-accent: linear-gradient(160deg, rgb(var(--color-accent-gold)) 0%, rgb(var(--color-accent-gold-dark)) 100%);
+    
+    /* State Gradients */
+    --gradient-action: linear-gradient(160deg, rgb(var(--color-accent-blue)) 0%, rgb(50 140 220) 100%);
+    --gradient-stop: linear-gradient(160deg, rgb(var(--color-accent-red)) 0%, rgb(200 50 50) 100%);
+    --gradient-success: linear-gradient(160deg, rgb(var(--color-accent-green)) 0%, rgb(18 130 60) 100%);
+
+    --radius: 10px;
+  }
+
+  /* Add a dark theme variant here if needed in the future */
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    background-image: var(--gradient-bg);
+    color: transparent; /* Text color will be handled by gradients */
+    background-attachment: fixed;
+    font-family: var(--font-sans);
+  }
+
+  /* Custom scrollbar for a polished look */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgb(var(--color-grey-200));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-grey-800) / 0.5);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--color-grey-900) / 0.7);
+  }
+}
