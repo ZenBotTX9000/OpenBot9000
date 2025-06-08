@@ -1,11 +1,14 @@
 // 1. TECH STACK
 // Framework: Next.js 15 | Build System: Webpack/Turbopack
-
 // 2. THE FIX: Aligning with the standard `src` directory structure.
 // This is the most robust way to ensure path aliases resolve correctly.
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -25,15 +28,25 @@
     // --- CRUCIAL UPDATE FOR SRC DIRECTORY ---
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
     // ---------------------------------------
+    ,
+    "target": "ES2017"
   },
   // --- INCLUDE MUST NOW POINT TO SRC ---
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
-
 // 3. FUTURE-PROOFING NOTE
 /*
 Why this is the definitive fix:
