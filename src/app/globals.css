@@ -38,10 +38,6 @@
 
   /* Add a dark theme variant here if needed in the future */
 
-  * {
-    @apply border-border;
-  }
-
   body {
     background-image: var(--gradient-bg);
     color: transparent; /* Text color will be handled by gradients */

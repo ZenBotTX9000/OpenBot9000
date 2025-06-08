@@ -80,7 +80,7 @@ export function ApiKeyModal() {
                 </summary>
                 <div className="mt-2 text-left space-y-1 p-2 rounded-md" style={{ background: 'rgb(var(--color-grey-200) / 0.5)' }}>
                     <p>1. Sign in to <a href="https://openrouter.ai" target="_blank" rel="noopener noreferrer" className="font-bold">OpenRouter.ai</a></p>
-                    <p>2. Navigate to your 'Keys' page from the account menu.</p>
+                    <p>2. Navigate to your &apos;Keys&apos; page from the account menu.</p>
                     <p>3. Create a new key and paste it here.</p>
                 </div>
             </details>

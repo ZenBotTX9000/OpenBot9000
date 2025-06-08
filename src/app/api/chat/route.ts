@@ -16,14 +16,16 @@ export async function POST(req: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
-        'HTTP-Referer': 'http://localhost:3000', // Replace with your domain
-        'X-Title': 'OpenBot9000', // Let OpenRouter know who is making requests
+        // Dynamically set Referer based on the request's origin
+        'HTTP-Referer': new URL(req.url).origin,
+        // X-Title can be made configurable via environment variables if needed
+        'X-Title': 'OpenBot9000',
       },
       body: JSON.stringify({
         model: model,
         messages: messages,
         stream: true,
-        //...config // Spread the config for max_tokens etc.
+        ...config // Spread the config for max_tokens etc.
       }),
     });
 

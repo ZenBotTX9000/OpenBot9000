@@ -52,11 +52,6 @@ export function useChat(initialSession: ChatSession) {
     setMessages(newMessages);
 
     try {
-      // TODO: Implement title generation logic here if desired
-      // if (newMessages.filter(m => m.role === 'user').length === 2) {
-      //   generateTitle(newMessages);
-      // }
-      
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,7 +60,8 @@ export function useChat(initialSession: ChatSession) {
           messages: [...messages, userMessage].map(({ role, content }) => ({ role, content })), // Send history
           config: initialSession.config,
           model: initialSession.modelId,
-          // We need to send the API key from the client
+          // API key is fetched from localStorage on each request.
+          // For more complex scenarios, consider managing this via React Context or a dedicated state manager.
           apiKey: localStorage.getItem('openrouter_api_key'),
         }),
       });
@@ -82,8 +78,10 @@ export function useChat(initialSession: ChatSession) {
         if (done) break;
         
         const chunk = decoder.decode(value);
-        // Assuming a simple protocol: "R:" for reasoning, "D:" for data/response
-        // A more robust implementation would use JSON streaming (NDJSON) or SSE
+        // Current streaming protocol assumes simple "R:" for reasoning and "D:" for data prefixes.
+        // This is fragile. For robust production systems, consider using Server-Sent Events (SSE)
+        // or Newline Delimited JSON (NDJSON), where each line is a self-contained JSON object
+        // indicating the type and payload of the message.
         const lines = chunk.split('\n').filter(line => line.trim() !== '');
         
         for (const line of lines) {
@@ -96,13 +94,13 @@ export function useChat(initialSession: ChatSession) {
            }
 
           setMessages(prev => prev.map(m =>
-            m.id === assistantMessage.id ? { ...m, content: finalContent, reasoning: finalReasoning } : m
+            m.id === assistantMessage.id ? { ...m, content: finalContent, reasoning: finalReasoning, status: 'streaming' } : m
           ));
         }
       }
       
       const finalMessages = newMessages.map(m =>
-        m.id === assistantMessage.id ? { ...m, content: finalContent, reasoning: finalReasoning, status: 'complete' } : m
+        m.id === assistantMessage.id ? { ...m, content: finalContent, reasoning: finalReasoning, status: 'complete' } as Message : m
       );
       setMessages(finalMessages);
       await updateSessionInDB(finalMessages);
@@ -110,7 +108,7 @@ export function useChat(initialSession: ChatSession) {
     } catch (error: any) {
       if (error.name === 'AbortError') {
         console.log("Stream generation aborted.");
-        const finalMessages = messages.map(m => m.id === assistantMessage.id ? {...m, status: 'interrupted'} : m);
+        const finalMessages = messages.map(m => m.id === assistantMessage.id ? {...m, status: 'interrupted'} as Message : m);
         await updateSessionInDB(finalMessages);
       } else {
         console.error("Streaming error:", error);
