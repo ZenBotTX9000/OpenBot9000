@@ -1,0 +1,42 @@
+// 1. TECH STACK
+// Framework: Next.js 15 | Language: TypeScript | Build Tool: Webpack (via Next)
+
+// 2. THE FIX: Defining the path alias for the build system.
+// The build failed because this configuration was missing or incorrect in the repo.
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    // --- THIS IS THE CRUCIAL CONFIGURATION ---
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
+    // -----------------------------------------
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+
+// 3. FUTURE-PROOFING NOTE
+/*
+Why this is required:
+ - `baseUrl`: Tells the compiler where to start looking for modules when resolving absolute paths. `.` means the project root.
+ - `paths`: Creates the mapping. It says "any path starting with `@/` should be resolved as if it started from the `baseUrl`".
+ - Without this, the `@/` alias is just a meaningless string to the compiler and bundler.
+*/
