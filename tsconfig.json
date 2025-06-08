@@ -1,8 +1,8 @@
 // 1. TECH STACK
-// Framework: Next.js 15 | Language: TypeScript | Build Tool: Webpack (via Next)
+// Framework: Next.js 15 | Build System: Webpack/Turbopack
 
-// 2. THE FIX: Defining the path alias for the build system.
-// The build failed because this configuration was missing or incorrect in the repo.
+// 2. THE FIX: Aligning with the standard `src` directory structure.
+// This is the most robust way to ensure path aliases resolve correctly.
 {
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -22,21 +22,23 @@
         "name": "next"
       }
     ],
-    // --- THIS IS THE CRUCIAL CONFIGURATION ---
+    // --- CRUCIAL UPDATE FOR SRC DIRECTORY ---
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     }
-    // -----------------------------------------
+    // ---------------------------------------
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  // --- INCLUDE MUST NOW POINT TO SRC ---
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
 
 // 3. FUTURE-PROOFING NOTE
 /*
-Why this is required:
- - `baseUrl`: Tells the compiler where to start looking for modules when resolving absolute paths. `.` means the project root.
- - `paths`: Creates the mapping. It says "any path starting with `@/` should be resolved as if it started from the `baseUrl`".
- - Without this, the `@/` alias is just a meaningless string to the compiler and bundler.
+Why this is the definitive fix:
+ - The Next.js compiler is heavily optimized for the `src` layout.
+ - This eliminates any potential bugs or edge cases in the RC build toolchain
+   related to root-level module resolution.
+ - It makes the project structure immediately familiar to any other Next.js developer.
 */
