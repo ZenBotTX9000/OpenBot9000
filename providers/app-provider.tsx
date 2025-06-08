@@ -1,7 +1,8 @@
 "use client";
 
-import { ApiKeyModal } from "@/components/auth/api-key-modal";
-import { useApiKey } from "@/hooks/use-api-key";
+// CORRECTED IMPORT PATH
+import { ApiKeyModal } from "../components/auth/api-key-modal";
+import { useApiKey } from "../hooks/use-api-key";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
