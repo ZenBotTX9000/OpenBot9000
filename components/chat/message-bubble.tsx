@@ -3,7 +3,8 @@
 import { Message } from "@/lib/types";
 import { motion } from "framer-motion";
 import { Bot, User } from "lucide-react";
-import { MarkdownRenderer } from "./markdown-renderer";
+// CORRECTED IMPORT PATH
+import { MarkdownRenderer } from "../shared/markdown-renderer"; 
 import { emergeAnimation } from "@/lib/animations";
 
 export function MessageBubble({ message }: { message: Message }) {
