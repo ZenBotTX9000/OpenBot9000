@@ -1,31 +1,36 @@
-// 1. TECH STACK
-// Core: Next.js 15 | VCS: Git | CI/CD: Vercel
-
 "use client";
 
-// 2. THE FIX: Using the absolute path alias `@/`.
-// This is the code that must be committed to your repository.
 import { ApiKeyModal } from "@/components/auth/api-key-modal";
 import { useApiKey } from "@/hooks/use-api-key";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
+// This provider ensures that the app has a valid API key before rendering the main UI.
+// It also handles the initial "hydration flicker" by waiting for client-side state.
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const { apiKey, isLoaded } = useApiKey();
   const [isClient, setIsClient] = useState(false);
 
+  // Wait until the component has mounted on the client to avoid hydration mismatch
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   if (!isClient || !isLoaded) {
+    // Render a blank screen or a subtle loader to prevent flicker while loading the API key from localStorage
     return <div className="w-full h-screen" style={{ background: 'var(--gradient-bg)' }} />;
   }
 
   return (
     <AnimatePresence mode="wait">
       {apiKey ? (
-        <motion.div key="app" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div
+          key="app"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           {children}
         </motion.div>
       ) : (
@@ -36,12 +41,3 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     </AnimatePresence>
   );
 }
-
-// 3. FUTURE-PROOFING NOTE / CI/CD DIAGNOSIS
-/*
-Why the build failed again:
- - Vercel builds from your GitHub repository directly.
- - The commit hash `0ec5469` confirms it pulled the old code.
- - A new `git commit` and `git push` are required to update the source
-   for the next build. This is the core of automated deployment.
-*/
